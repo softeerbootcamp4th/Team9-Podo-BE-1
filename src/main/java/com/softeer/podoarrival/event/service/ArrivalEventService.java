@@ -20,9 +20,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class ArrivalEventService {
     private final RedissonClient redissonClient;
-    @Value("${secret.max-arrival-count}")
-    private int maxArrival;
-    private boolean maxarrived = false;
+    private final int maxArrival = 100;
     private final String finished = "finished";
 
     @Transactional

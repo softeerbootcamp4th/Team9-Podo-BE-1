@@ -25,7 +25,3 @@ spring:
 secret:
     jwt: ${SECRET_JWT}
     redis-url: ${REDIS_URL}
-    max-arrival-count: ${MAX_COUNT}
-
-
-
