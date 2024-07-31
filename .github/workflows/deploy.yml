@@ -7,8 +7,6 @@ on:
   # Triggers the 'Deploy' workflow after the push but only for the master branch - (instead of Pull Request)
   push:
     branches: [ "master" ]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 permissions:
   contents: read
