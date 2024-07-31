@@ -10,6 +10,7 @@ import org.redisson.api.BatchResult;
 import org.redisson.api.RBatch;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class ArrivalEventService {
     private final RedissonClient redissonClient;
-    private final int maxArrival = 100;
+    @Value("${secret.max-arrival-count}")
+    private int maxArrival;
     private boolean maxarrived = false;
     private final String finished = "finished";
 
@@ -37,7 +39,7 @@ public class ArrivalEventService {
         batch.getSet(now.toString() + "arrivalset").sizeAsync();
         BatchResult<?> res = batch.execute();
 
-        //첫번째 응답인
+        //첫번째 응답
         if(!(boolean) res.getResponses().get(0)){
             throw new ExistingUserException("이미 응모한 전화번호입니다.");
         }

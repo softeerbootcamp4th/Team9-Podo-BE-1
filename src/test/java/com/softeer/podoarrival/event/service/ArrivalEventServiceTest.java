@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,11 +39,14 @@ class ArrivalEventServiceTest {
         redissonClient.shutdown();
     }
 
+    @Value("${MAX_COUNT}")
+    private int MAX_COUNT;
+
     @Test
     @DisplayName("선착순 api 정확도 테스트")
     void applicationTest() throws InterruptedException {
         //given
-        int threadCount = 1000;
+        int threadCount = 100000;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
         AtomicInteger count = new AtomicInteger();
@@ -69,6 +73,6 @@ class ArrivalEventServiceTest {
 
         //then
         redissonClient.getSet("arrivalset").clear();
-        assertEquals(100, count.get());
+        assertEquals(MAX_COUNT, count.get());
     }
 }
