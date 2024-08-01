@@ -24,9 +24,8 @@ public enum ErrorCode {
     USERNAME_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(), "이미 존재하는 닉네임입니다."),
 
     //event_arrival
-    PHONENUM_EXSIST_ERROR(false, HttpStatus.BAD_REQUEST.value(),"이미 응모 전화번호입니다.")
+    PHONENUM_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(),"이미 응모 전화번호입니다.")
     ;
-
 
 
     private Boolean isSuccess;
