@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.event.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class GetQuizResponseDto {
     private String choice4;
     private String answer;
 
+    @JsonIgnore
     public boolean isInvalid() {
         return (question==null || choice1==null || choice2==null || choice3==null || choice4==null || answer==null);
     }
