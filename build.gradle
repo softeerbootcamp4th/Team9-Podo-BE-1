@@ -24,7 +24,8 @@ repositories {
 }
 
 dependencies {
-
+    // spring batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
     // swagger (spring 3.x버전이라 springfox 적용불가, springdoc 중에서 호환되는 종속성 사용)
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     // javax validation
