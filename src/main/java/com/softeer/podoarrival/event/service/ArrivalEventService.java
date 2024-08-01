@@ -48,7 +48,7 @@ public class ArrivalEventService {
             return new ArrivalApplicationResponseDto("선착순 응모에 성공했습니다.");
         }else{
             check.set(FINISHED);
-            return new ArrivalApplicationResponseDto("선착순 응모에 성공했습니다.");
+            return new ArrivalApplicationResponseDto("선착순 응모에 실패했습니다.");
         }
     }
 

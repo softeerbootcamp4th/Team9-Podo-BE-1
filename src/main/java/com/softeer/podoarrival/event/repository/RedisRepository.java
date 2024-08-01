@@ -28,7 +28,7 @@ public class RedisRepository {
 
     public String getValues(String key) {
         RBucket<String> bucket = redissonClient.getBucket(key);
-        return bucket.isExists() ? bucket.get() : "false";
+        return bucket.isExists() ? bucket.get() : null;
     }
 
     public void deleteValues(String key) {
@@ -54,9 +54,5 @@ public class RedisRepository {
     public void deleteHashOps(String key, String hashKey) {
         RMap<String, String> map = redissonClient.getMap(key);
         map.remove(hashKey);
-    }
-
-    public boolean checkExistsValue(String value) {
-        return !value.equals("false");
     }
 }

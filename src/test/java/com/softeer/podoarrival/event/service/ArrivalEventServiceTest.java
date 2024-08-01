@@ -61,7 +61,7 @@ class ArrivalEventServiceTest {
                                     Role.ROLE_USER
                             )
                     );
-                    if(res.getResponse().equals("success")) count.getAndIncrement();
+                    if(res.getResponse().equals("선착순 응모에 성공했습니다.")) count.getAndIncrement();
                 } finally {
                     countDownLatch.countDown();
                 }

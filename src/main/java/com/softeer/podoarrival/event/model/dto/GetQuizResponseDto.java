@@ -12,4 +12,8 @@ public class GetQuizResponseDto {
     private String choice3;
     private String choice4;
     private String answer;
+
+    public boolean isInvalid() {
+        return (question==null || choice1==null || choice2==null || choice3==null || choice4==null || answer==null);
+    }
 }
