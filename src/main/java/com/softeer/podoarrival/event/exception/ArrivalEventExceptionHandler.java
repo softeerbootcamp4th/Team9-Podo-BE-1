@@ -17,8 +17,8 @@ public class ArrivalEventExceptionHandler {
     @ExceptionHandler(ExistingUserException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponse<?> existingUserException(ExistingUserException e, HttpServletRequest request) {
-        log.warn("ARRIVALAPPLICATION-001> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
-        return new CommonResponse<>(ErrorCode.PHONENUM_EXSIST_ERROR);
+        log.warn("ARRIVAL-001> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
+        return new CommonResponse<>(ErrorCode.PHONENUM_EXISTS_ERROR);
     }
 
 }

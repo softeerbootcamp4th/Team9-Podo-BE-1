@@ -1,6 +1,5 @@
 package com.softeer.podoarrival.event.exception;
 
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

@@ -5,14 +5,12 @@ import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.security.AuthInfo;
 import com.softeer.podoarrival.user.model.entity.Role;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.concurrent.CountDownLatch;
@@ -56,7 +54,7 @@ class ArrivalEventServiceTest {
             long userId = i;
             executorService.submit(() -> {
                 try {
-                    ArrivalApplicationResponseDto res= arrivalEventService.application(
+                    ArrivalApplicationResponseDto res= arrivalEventService.applyEvent(
                             new AuthInfo(
                                     "teat" + userId,
                                     "010-1234-5678-" + userId,

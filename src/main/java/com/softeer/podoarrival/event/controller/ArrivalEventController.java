@@ -23,9 +23,7 @@ public class ArrivalEventController {
 
     @PostMapping("/application")
     @Operation(summary = "선착순 응모용 Api")
-    public CommonResponse<ArrivalApplicationResponseDto> arrivalEventApplicaion(@Auth AuthInfo authInfo){
-        return new CommonResponse<>(arrivalEventService.application(authInfo));
+    public CommonResponse<ArrivalApplicationResponseDto> arrivalEventApplication(@Auth AuthInfo authInfo){
+        return new CommonResponse<>(arrivalEventService.applyEvent(authInfo));
     }
-
-
 }
