@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArrivalUser extends DateEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -25,6 +24,8 @@ public class ArrivalUser extends DateEntity {
 
     @Column(name = "phone_number", unique = true)
     private String phoneNum;
+    @Column(name = "arrival_rank")
+    private int arrivalRank;
     @Enumerated(EnumType.STRING)
     private Role role;
 }
