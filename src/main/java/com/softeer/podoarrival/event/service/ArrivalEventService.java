@@ -3,6 +3,9 @@ package com.softeer.podoarrival.event.service;
 import com.softeer.podoarrival.event.exception.ExistingUserException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.security.AuthInfo;
+import com.softeer.podoarrival.user.model.entity.ArrivalUser;
+import com.softeer.podoarrival.user.model.entity.Role;
+import com.softeer.podoarrival.user.repository.ArrivalUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.BatchResult;
 import org.redisson.api.RBatch;
@@ -18,6 +21,7 @@ import java.time.LocalDate;
 public class ArrivalEventService {
 
     private final RedissonClient redissonClient;
+    private final ArrivalUserRepository arrivalUserRepository;
 
     private final String FINISHED = "finished";
     private final String ARRIVAL_SET = "arrivalset";
@@ -45,6 +49,14 @@ public class ArrivalEventService {
         }
 
         if((int) res.getResponses().get(1) <= MAX_ARRIVAL){
+            arrivalUserRepository.save(
+                    ArrivalUser.builder()
+                            .name(authInfo.getName())
+                            .phoneNum(authInfo.getPhoneNum())
+                            .role(Role.ROLE_USER)
+                            .arrivalRank((int) res.getResponses().get(1))
+                            .build()
+            );
             return new ArrivalApplicationResponseDto("선착순 응모에 성공했습니다.");
         }else{
             check.set(FINISHED);
