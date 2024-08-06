@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArrivalApplicationResponseDto {
     private String response;
+    private int grade;
 }
