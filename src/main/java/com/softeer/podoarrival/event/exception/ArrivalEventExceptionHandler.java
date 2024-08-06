@@ -21,4 +21,11 @@ public class ArrivalEventExceptionHandler {
         return new CommonResponse<>(ErrorCode.PHONENUM_EXISTS_ERROR);
     }
 
+    @ExceptionHandler(AsyncRequestExecuteException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public CommonResponse<?> asyncRequestExecuteException(AsyncRequestExecuteException e, HttpServletRequest request) {
+        log.warn("ARRIVAL-002> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
+        return new CommonResponse<>(ErrorCode.INTERNAL_SERVER_ERROR);
+    }
+
 }

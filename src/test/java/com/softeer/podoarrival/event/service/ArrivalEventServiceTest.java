@@ -3,7 +3,7 @@ package com.softeer.podoarrival.event.service;
 import com.softeer.podoarrival.PodoArrivalApplication;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.security.AuthInfo;
-import com.softeer.podoarrival.user.model.entity.Role;
+import com.softeer.podoarrival.event.model.entity.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,14 +52,16 @@ class ArrivalEventServiceTest {
             long userId = i;
             executorService.submit(() -> {
                 try {
-                    ArrivalApplicationResponseDto res= arrivalEventService.applyEvent(
+                    CompletableFuture<ArrivalApplicationResponseDto> futureResponse = arrivalEventService.applyEvent(
                             new AuthInfo(
                                     "teat" + userId,
                                     "010-1234-5678-" + userId,
                                     Role.ROLE_USER
                             )
                     );
-                    if(res.getResponse().equals("선착순 응모에 성공했습니다.")) count.getAndIncrement();
+                    if(futureResponse.get().getResponse().equals("선착순 응모에 성공했습니다.")) count.getAndIncrement();
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new RuntimeException(e);
                 } finally {
                     countDownLatch.countDown();
                 }

@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ExistingUserException extends RuntimeException {
+public class AsyncRequestExecuteException extends RuntimeException {
     private String message;
 }
