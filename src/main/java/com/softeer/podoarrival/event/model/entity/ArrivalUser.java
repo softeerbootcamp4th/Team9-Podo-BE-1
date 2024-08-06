@@ -1,4 +1,4 @@
-package com.softeer.podoarrival.user.model.entity;
+package com.softeer.podoarrival.event.model.entity;
 
 import com.softeer.podoarrival.common.entity.DateEntity;
 import jakarta.persistence.*;

@@ -1,6 +1,6 @@
 package com.softeer.podoarrival.security;
 
-import com.softeer.podoarrival.user.model.entity.Role;
+import com.softeer.podoarrival.event.model.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.softeer.podoarrival.security;
 
 import com.softeer.podoarrival.security.jwt.exception.InvalidTokenException;
-import com.softeer.podoarrival.user.model.entity.Role;
+import com.softeer.podoarrival.event.model.entity.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

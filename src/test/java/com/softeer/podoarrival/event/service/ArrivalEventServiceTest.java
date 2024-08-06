@@ -3,7 +3,7 @@ package com.softeer.podoarrival.event.service;
 import com.softeer.podoarrival.PodoArrivalApplication;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.security.AuthInfo;
-import com.softeer.podoarrival.user.model.entity.Role;
+import com.softeer.podoarrival.event.model.entity.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
