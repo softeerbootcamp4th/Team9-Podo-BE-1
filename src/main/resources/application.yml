@@ -1,5 +1,11 @@
 server:
   port: 8081
+  tomcat:
+#    max-connections: 500000 # 최대 클라이언트 연결 수
+    threads:
+      max: 200 # 작업 스레드
+#    accept-count: 500000 # 요청 대기 큐 크기
+#    connection-timeout: 600000 # 연결 타임아웃 (밀리초)
 
 spring:
   application:
