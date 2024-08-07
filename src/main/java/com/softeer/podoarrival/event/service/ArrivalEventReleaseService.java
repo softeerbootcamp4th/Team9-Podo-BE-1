@@ -29,7 +29,7 @@ public class ArrivalEventReleaseService {
     private final String ARRIVAL_SET = "arrivalset";
     private boolean CHECK = false;
 
-    private static int MAX_ARRIVAL = 100;
+    private static int MAX_ARRIVAL = 0;
 
     /**
      * 비동기로 Redis 호출하는 메서드
@@ -52,7 +52,6 @@ public class ArrivalEventReleaseService {
 
             //첫번째 응답
             if(!(boolean) res.getResponses().get(0)){
-                log.info("전화번호-중복 = {}", authInfo.getPhoneNum());
                 throw new ExistingUserException("이미 응모한 전화번호입니다.");
             }
 

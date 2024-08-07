@@ -31,7 +31,7 @@ public class ArrivalEventMaxArrivalScheduler {
      * 특정 시간에 Mysql에서 금일 진행될 선착순 이벤트의 당첨자 수를 읽어옴
      *
      */
-    @Scheduled(cron = "0 45 19 * * *")
+    @Scheduled(cron = "0 25 03 * * *")
     public void setDailyQuiz() {
         // 시작일자, 이벤트 종류만 고려하여 이벤트 추출
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
