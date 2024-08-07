@@ -2,16 +2,17 @@ package com.softeer.podoarrival.event.service;
 
 import com.softeer.podoarrival.event.exception.ExistingUserException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
-import com.softeer.podoarrival.security.AuthInfo;
 import com.softeer.podoarrival.event.model.entity.ArrivalUser;
 import com.softeer.podoarrival.event.model.entity.Role;
 import com.softeer.podoarrival.event.repository.ArrivalUserRepository;
+import com.softeer.podoarrival.security.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.BatchResult;
 import org.redisson.api.RBatch;
 import org.redisson.api.RedissonClient;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,14 +29,14 @@ public class ArrivalEventReleaseService {
     private final String ARRIVAL_SET = "arrivalset";
     private boolean CHECK = false;
 
-    private final int MAX_ARRIVAL = 100;
+    private static int MAX_ARRIVAL = 0;
 
     /**
      * 비동기로 Redis 호출하는 메서드
      * 반환값은 ArrivalEventService에서 받아서 선착순 처리
      */
     @Async("arrivalExecutor")
-    public CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo){
+    public CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo) {
         return CompletableFuture.supplyAsync(() -> {
             LocalDate now = LocalDate.now();
 
@@ -51,7 +52,6 @@ public class ArrivalEventReleaseService {
 
             //첫번째 응답
             if(!(boolean) res.getResponses().get(0)){
-                log.info("전화번호-중복 = {}", authInfo.getPhoneNum());
                 throw new ExistingUserException("이미 응모한 전화번호입니다.");
             }
 
@@ -72,5 +72,9 @@ public class ArrivalEventReleaseService {
                 return new ArrivalApplicationResponseDto("선착순 응모에 실패했습니다.", -1);
             }
         });
+    }
+
+    public static void setMaxArrival(int val) {
+        MAX_ARRIVAL = val;
     }
 }
