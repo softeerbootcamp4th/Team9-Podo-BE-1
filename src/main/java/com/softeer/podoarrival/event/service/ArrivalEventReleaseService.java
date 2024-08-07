@@ -77,10 +77,4 @@ public class ArrivalEventReleaseService {
     public static void setMaxArrival(int val) {
         MAX_ARRIVAL = val;
     }
-
-
-    @Scheduled(cron = "0 20 3 * * *")
-    public void setMaxArrivalCount() {
-
-    }
 }

@@ -32,7 +32,7 @@ public class ArrivalEventMaxArrivalScheduler {
      *
      */
     @Scheduled(cron = "0 25 03 * * *")
-    public void setDailyQuiz() {
+    public void setEventArrivalCount() {
         // 시작일자, 이벤트 종류만 고려하여 이벤트 추출
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = startOfDay.plusDays(1).minusNanos(1);
