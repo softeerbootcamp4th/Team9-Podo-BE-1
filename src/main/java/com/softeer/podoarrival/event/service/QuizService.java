@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.event.service;
 
+import com.softeer.podoarrival.event.exception.DailyQuizNotExistsException;
 import com.softeer.podoarrival.event.model.dto.GetQuizResponseDto;
 import com.softeer.podoarrival.event.model.entity.Quiz;
 import com.softeer.podoarrival.event.repository.QuizRepository;
@@ -43,6 +44,9 @@ public class QuizService {
         // cache miss
         if(quizDto.isInvalid()) {
             Quiz quiz = quizRepository.findByEventDate(LocalDate.now());
+            if(quiz == null) {
+                throw new DailyQuizNotExistsException("오늘 날짜에 퀴즈가 존재하지 않습니다.");
+            }
             setQuizToRedis(quiz);
             return QuizMapper.mapQuizToGetQuizResponseDto(quiz);
 

@@ -28,4 +28,10 @@ public class ArrivalEventExceptionHandler {
         return new CommonResponse<>(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(DailyQuizNotExistsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public CommonResponse<?> dailyQuizNotFoundException(DailyQuizNotExistsException e, HttpServletRequest request) {
+        log.warn("ARRIVAL-003> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
+        return new CommonResponse<>(ErrorCode.QUIZ_NOT_EXISTS_ERROR);
+    }
 }

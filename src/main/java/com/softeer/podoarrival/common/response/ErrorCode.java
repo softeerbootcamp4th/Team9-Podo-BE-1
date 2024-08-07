@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.common.response;
 
+import com.softeer.podoarrival.event.exception.DailyQuizNotExistsException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -23,7 +24,8 @@ public enum ErrorCode {
     USERNAME_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(), "이미 존재하는 닉네임입니다."),
 
     //event_arrival
-    PHONENUM_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(),"이미 응모한 전화번호입니다.")
+    PHONENUM_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(),"이미 응모한 전화번호입니다."),
+    QUIZ_NOT_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(), "오늘 날짜의 퀴즈가 존재하지 않습니다.")
     ;
 
 
