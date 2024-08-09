@@ -1,6 +1,5 @@
-package com.softeer.podoarrival.domain.base;
+package com.softeer.podoarrival.unit.base;
 
-import com.softeer.podoarrival.domain.quiz.GetQuizListTest;
 import com.softeer.podoarrival.event.repository.QuizRepository;
 import com.softeer.podoarrival.event.repository.RedisRepository;
 import com.softeer.podoarrival.event.service.QuizService;

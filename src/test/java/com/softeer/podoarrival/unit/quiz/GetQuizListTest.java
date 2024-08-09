@@ -1,6 +1,6 @@
-package com.softeer.podoarrival.domain.quiz;
+package com.softeer.podoarrival.unit.quiz;
 
-import com.softeer.podoarrival.domain.base.QuizServiceBase;
+import com.softeer.podoarrival.unit.base.QuizServiceBase;
 import com.softeer.podoarrival.event.model.dto.GetQuizResponseDto;
 import com.softeer.podoarrival.event.model.entity.Quiz;
 import org.junit.jupiter.api.DisplayName;
