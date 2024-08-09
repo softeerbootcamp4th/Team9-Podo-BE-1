@@ -43,7 +43,6 @@ public class ArrivalEventReleaseService {
             if(CHECK){
                 return new ArrivalApplicationResponseDto("선착순 응모에 실패했습니다.", -1);
             }
-            log.info("전화번호 = {}", authInfo.getPhoneNum());
 
             RBatch batch = redissonClient.createBatch();
             batch.getSet(now + ARRIVAL_SET).addAsync(authInfo.getPhoneNum());
@@ -66,6 +65,7 @@ public class ArrivalEventReleaseService {
                                 .arrivalRank(grade)
                                 .build()
                 );
+                log.info("전화번호 = {}", authInfo.getPhoneNum());
                 return new ArrivalApplicationResponseDto("선착순 응모에 성공했습니다.", grade);
             } else {
                 CHECK = true;

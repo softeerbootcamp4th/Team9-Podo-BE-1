@@ -1,7 +1,8 @@
-package com.softeer.podoarrival.event.service;
+package com.softeer.podoarrival.integration.event;
 
 import com.softeer.podoarrival.PodoArrivalApplication;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
+import com.softeer.podoarrival.event.service.ArrivalEventService;
 import com.softeer.podoarrival.security.AuthInfo;
 import com.softeer.podoarrival.event.model.entity.Role;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +18,6 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest
 @ContextConfiguration(classes = PodoArrivalApplication.class)
