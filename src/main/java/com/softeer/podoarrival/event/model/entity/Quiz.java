@@ -2,6 +2,7 @@ package com.softeer.podoarrival.event.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "quizzes")
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Quiz {
