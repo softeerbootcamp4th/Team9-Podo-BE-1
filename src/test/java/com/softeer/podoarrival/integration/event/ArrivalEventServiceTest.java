@@ -2,22 +2,21 @@ package com.softeer.podoarrival.integration.event;
 
 import com.softeer.podoarrival.PodoArrivalApplication;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
+import com.softeer.podoarrival.event.model.entity.Role;
 import com.softeer.podoarrival.event.service.ArrivalEventService;
 import com.softeer.podoarrival.security.AuthInfo;
-import com.softeer.podoarrival.event.model.entity.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ContextConfiguration(classes = PodoArrivalApplication.class)
@@ -31,12 +30,11 @@ class ArrivalEventServiceTest {
 
     @AfterEach
     void tearDown() {
-        redissonClient.getKeys().flushdb();
+        redissonClient.getKeys().deleteByPattern("*arrivalset");
         redissonClient.shutdown();
     }
 
-    @Value("${MAX_COUNT}")
-    private int MAX_COUNT;
+    private int MAX_COUNT = 100;
 
     @Test
     @DisplayName("선착순 api 정확도 테스트")
@@ -70,7 +68,6 @@ class ArrivalEventServiceTest {
         countDownLatch.await();
 
         //then
-        redissonClient.getSet("arrivalset").clear();
         assertEquals(MAX_COUNT, count.get());
     }
 }
