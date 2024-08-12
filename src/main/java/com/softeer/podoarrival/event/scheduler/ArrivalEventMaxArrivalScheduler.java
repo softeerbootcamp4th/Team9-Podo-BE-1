@@ -1,4 +1,4 @@
-package com.softeer.podoarrival.event.scheduler.scheduler;
+package com.softeer.podoarrival.event.scheduler;
 
 import com.softeer.podoarrival.event.exception.EventTypeNotExistsException;
 import com.softeer.podoarrival.event.model.entity.Event;
