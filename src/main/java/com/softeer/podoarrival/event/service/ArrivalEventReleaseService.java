@@ -77,4 +77,8 @@ public class ArrivalEventReleaseService {
     public static void setMaxArrival(int val) {
         MAX_ARRIVAL = val;
     }
+
+    public static int getMaxArrival() {
+        return MAX_ARRIVAL;
+    }
 }
