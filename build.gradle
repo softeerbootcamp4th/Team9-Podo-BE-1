@@ -2,7 +2,43 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'jacoco'
 }
+
+jacoco {
+    toolVersion = "0.8.9"
+}
+
+/** Jacoco start **/
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+
+        // QueryDSL Q클래스 제외
+        def Qdomains = []
+        for (qPattern in "**/QA".."**/QZ") {
+            Qdomains.add(qPattern + "*")
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it,
+                        exclude: [] + Qdomains)
+            }))
+        }
+
+        xml.destination file("${buildDir}/jacoco/index.xml")
+        html.destination file("${buildDir}/jacoco/index.html")
+    }
+}
+/** Jacoco end **/
 
 group = 'com.softeer'
 version = '0.0.1-SNAPSHOT'
@@ -47,8 +83,11 @@ dependencies {
     implementation 'com.nimbusds:nimbus-jose-jwt:9.37.3'
     // lombok
     annotationProcessor 'org.projectlombok:lombok'
+    // junit
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // test h2 database
+    testRuntimeOnly 'com.h2database:h2'
     //redission
     implementation 'org.redisson:redisson-spring-boot-starter:3.33.0'
     implementation "org.redisson:redisson-spring-data-27:3.33.0"

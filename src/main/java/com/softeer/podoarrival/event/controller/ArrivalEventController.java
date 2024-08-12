@@ -2,10 +2,9 @@ package com.softeer.podoarrival.event.controller;
 
 
 import com.softeer.podoarrival.common.response.CommonResponse;
-import com.softeer.podoarrival.common.response.ErrorCode;
 import com.softeer.podoarrival.event.exception.AsyncRequestExecuteException;
+import com.softeer.podoarrival.event.exception.ExistingUserException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
-import com.softeer.podoarrival.event.service.ArrivalEventReleaseService;
 import com.softeer.podoarrival.event.service.ArrivalEventService;
 import com.softeer.podoarrival.security.Auth;
 import com.softeer.podoarrival.security.AuthInfo;
@@ -33,10 +32,11 @@ public class ArrivalEventController {
         return arrivalEventService.applyEvent(authInfo)
                 .thenApply(result -> new CommonResponse<>(result))
                 .exceptionally(ex -> {
-                    log.error("비동기 처리 중 오류 발생", ex);
-                    // 예외 발생 시 적절한 오류 응답을 반환
-                    throw new AsyncRequestExecuteException("선착순 요청 중 서버 오류 발생");
+                    if(ex.getCause() instanceof ExistingUserException) {
+                        throw new ExistingUserException("[비동기 에러] 유저가 이미 존재합니다.");
+                    } else {
+                        throw new AsyncRequestExecuteException("[비동기 에러] 선착순 요청 중 서버 오류 발생");
+                    }
                 });
     }
-
 }

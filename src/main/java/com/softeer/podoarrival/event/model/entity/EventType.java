@@ -4,12 +4,10 @@ import com.softeer.podoarrival.common.entity.DateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "event_types")
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MYSQL;DATABASE_TO_UPPER=false
+    username: sa
+    password:
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+
+secret:
+  jwt: ${SECRET_JWT}
+  redis-url: ${REDIS_URL}

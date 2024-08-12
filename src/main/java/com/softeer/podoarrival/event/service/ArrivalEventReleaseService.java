@@ -29,7 +29,7 @@ public class ArrivalEventReleaseService {
     private final String ARRIVAL_SET = "arrivalset";
     private boolean CHECK = false;
 
-    private static int MAX_ARRIVAL = 0;
+    private static int MAX_ARRIVAL = 100; // default
 
     /**
      * 비동기로 Redis 호출하는 메서드
@@ -38,16 +38,15 @@ public class ArrivalEventReleaseService {
     @Async("arrivalExecutor")
     public CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo) {
         return CompletableFuture.supplyAsync(() -> {
-            LocalDate now = LocalDate.now();
+            String redisKey = LocalDate.now() + ARRIVAL_SET;
 
             if(CHECK){
                 return new ArrivalApplicationResponseDto("선착순 응모에 실패했습니다.", -1);
             }
-            log.info("전화번호 = {}", authInfo.getPhoneNum());
 
             RBatch batch = redissonClient.createBatch();
-            batch.getSet(now + ARRIVAL_SET).addAsync(authInfo.getPhoneNum());
-            batch.getSet(now + ARRIVAL_SET).sizeAsync();
+            batch.getSet(redisKey).addAsync(authInfo.getPhoneNum());
+            batch.getSet(redisKey).sizeAsync();
             BatchResult<?> res = batch.execute();
 
             //첫번째 응답
@@ -66,6 +65,7 @@ public class ArrivalEventReleaseService {
                                 .arrivalRank(grade)
                                 .build()
                 );
+                log.info("전화번호 = {}", authInfo.getPhoneNum());
                 return new ArrivalApplicationResponseDto("선착순 응모에 성공했습니다.", grade);
             } else {
                 CHECK = true;
@@ -76,5 +76,9 @@ public class ArrivalEventReleaseService {
 
     public static void setMaxArrival(int val) {
         MAX_ARRIVAL = val;
+    }
+
+    public static int getMaxArrival() {
+        return MAX_ARRIVAL;
     }
 }
