@@ -41,7 +41,7 @@ public class ArrivalEventReleaseService {
             String redisKey = LocalDate.now() + ARRIVAL_SET;
 
             if(CHECK){
-                return new ArrivalApplicationResponseDto("선착순 응모에 실패했습니다.", -1);
+                return new ArrivalApplicationResponseDto(false, authInfo.getName(), authInfo.getPhoneNum(), -1);
             }
 
             RBatch batch = redissonClient.createBatch();
@@ -66,10 +66,10 @@ public class ArrivalEventReleaseService {
                                 .build()
                 );
                 log.info("전화번호 = {}", authInfo.getPhoneNum());
-                return new ArrivalApplicationResponseDto("선착순 응모에 성공했습니다.", grade);
+                return new ArrivalApplicationResponseDto(true, authInfo.getName(), authInfo.getPhoneNum(), grade);
             } else {
                 CHECK = true;
-                return new ArrivalApplicationResponseDto("선착순 응모에 실패했습니다.", -1);
+                return new ArrivalApplicationResponseDto(false, authInfo.getName(), authInfo.getPhoneNum(), grade);
             }
         });
     }

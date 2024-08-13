@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArrivalApplicationResponseDto {
-    private String response;
+    private boolean success;
+    private String name;
+    private String phoneNum;
     private int grade;
 }
