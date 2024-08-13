@@ -57,7 +57,7 @@ class ArrivalEventServiceTest {
                                     Role.ROLE_USER
                             )
                     );
-                    if(futureResponse.get().getResponse().equals("선착순 응모에 성공했습니다.")) count.getAndIncrement();
+                    if(futureResponse.get().isSuccess()) count.getAndIncrement();
                 } catch (ExecutionException | InterruptedException e) {
                     throw new RuntimeException(e);
                 } finally {
