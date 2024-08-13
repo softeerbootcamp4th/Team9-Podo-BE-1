@@ -6,7 +6,8 @@ import com.softeer.podoarrival.event.model.entity.EventType;
 import com.softeer.podoarrival.event.repository.EventRepository;
 import com.softeer.podoarrival.event.repository.EventRewardRepository;
 import com.softeer.podoarrival.event.repository.EventTypeRepository;
-import com.softeer.podoarrival.event.service.ArrivalEventReleaseService;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceJavaImpl;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceRedisImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,6 +45,7 @@ public class ArrivalEventMaxArrivalScheduler {
         // 찾은 이벤트에 해당하는 reword개수 조회
         int rewordCount = eventRewardRepository.countByEvent(findEvent);
 
-        ArrivalEventReleaseService.setMaxArrival(rewordCount);
+        ArrivalEventReleaseServiceRedisImpl.setMaxArrival(rewordCount);
+        ArrivalEventReleaseServiceJavaImpl.setMaxArrival(rewordCount);
     }
 }
