@@ -2,7 +2,8 @@ package com.softeer.podoarrival.unit.scheduler;
 
 import com.softeer.podoarrival.event.model.entity.Event;
 import com.softeer.podoarrival.event.model.entity.EventType;
-import com.softeer.podoarrival.event.service.ArrivalEventReleaseService;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceJavaImpl;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceRedisImpl;
 import com.softeer.podoarrival.unit.base.ArrivalEventMaxCountSchedulerBase;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -46,7 +47,9 @@ public class ArrivalEventMaxCountSchedulerTest extends ArrivalEventMaxCountSched
         arrivalEventMaxArrivalScheduler.setEventArrivalCount();
 
         // then
-        Assertions.assertThat(ArrivalEventReleaseService.getMaxArrival())
+        Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getMaxArrival())
+                .isEqualTo(50);
+        Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getMaxArrival())
                 .isEqualTo(50);
     }
 
@@ -70,7 +73,9 @@ public class ArrivalEventMaxCountSchedulerTest extends ArrivalEventMaxCountSched
         arrivalEventMaxArrivalScheduler.setEventArrivalCount();
 
         // then
-        Assertions.assertThat(ArrivalEventReleaseService.getMaxArrival())
+        Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getMaxArrival())
+                .isEqualTo(0);
+        Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getMaxArrival())
                 .isEqualTo(0);
     }
 }
