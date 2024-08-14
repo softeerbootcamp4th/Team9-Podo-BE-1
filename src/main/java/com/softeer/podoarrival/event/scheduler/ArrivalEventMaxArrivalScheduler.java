@@ -2,6 +2,7 @@ package com.softeer.podoarrival.event.scheduler;
 
 import com.softeer.podoarrival.event.exception.EventTypeNotExistsException;
 import com.softeer.podoarrival.event.model.entity.Event;
+import com.softeer.podoarrival.event.model.entity.EventReward;
 import com.softeer.podoarrival.event.model.entity.EventType;
 import com.softeer.podoarrival.event.repository.EventRepository;
 import com.softeer.podoarrival.event.repository.EventRewardRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 선착순 이벤트의 당첨자 수를 세팅하는 스케줄러
@@ -42,10 +44,14 @@ public class ArrivalEventMaxArrivalScheduler {
         EventType eventType = eventTypeRepository.findById(1L).orElseThrow(() -> new EventTypeNotExistsException("이벤트 타입이 존재하지 않습니다."));
         Event findEvent = eventRepository.findFirstByEventTypeAndStartAtBetween(eventType, startOfDay, endOfDay);
 
-        // 찾은 이벤트에 해당하는 reword개수 조회
-        int rewordCount = eventRewardRepository.countByEvent(findEvent);
+        // 찾은 이벤트에 해당하는 reward개수 조회
+        int rewardCount = 0;
+        List<EventReward> eventRewards = eventRewardRepository.findAllByEvent(findEvent);
+        for (EventReward eventReward : eventRewards) {
+            rewardCount += eventReward.getNumWinners();
+        }
 
-        ArrivalEventReleaseServiceRedisImpl.setMaxArrival(rewordCount);
-        ArrivalEventReleaseServiceJavaImpl.setMaxArrival(rewordCount);
+        ArrivalEventReleaseServiceRedisImpl.setMaxArrival(rewardCount);
+        ArrivalEventReleaseServiceJavaImpl.setMaxArrival(rewardCount);
     }
 }
