@@ -5,7 +5,6 @@ import com.softeer.podoarrival.security.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -14,10 +13,9 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class ArrivalEventService {
 
-    private final ArrivalEventReleaseService arrivalEventReleaseService;
+    private final ArrivalEventReleaseService arrivalEventReleaseServiceRedisImpl;
 
-    @Transactional
     public CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo) {
-        return arrivalEventReleaseService.applyEvent(authInfo);
+        return arrivalEventReleaseServiceRedisImpl.applyEvent(authInfo);
     }
 }

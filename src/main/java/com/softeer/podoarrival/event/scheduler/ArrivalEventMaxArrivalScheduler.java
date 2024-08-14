@@ -7,7 +7,8 @@ import com.softeer.podoarrival.event.model.entity.EventType;
 import com.softeer.podoarrival.event.repository.EventRepository;
 import com.softeer.podoarrival.event.repository.EventRewardRepository;
 import com.softeer.podoarrival.event.repository.EventTypeRepository;
-import com.softeer.podoarrival.event.service.ArrivalEventReleaseService;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceJavaImpl;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceRedisImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -50,6 +51,7 @@ public class ArrivalEventMaxArrivalScheduler {
             rewardCount += eventReward.getNumWinners();
         }
 
-        ArrivalEventReleaseService.setMaxArrival(rewardCount);
+        ArrivalEventReleaseServiceRedisImpl.setMaxArrival(rewordCount);
+        ArrivalEventReleaseServiceJavaImpl.setMaxArrival(rewordCount);
     }
 }

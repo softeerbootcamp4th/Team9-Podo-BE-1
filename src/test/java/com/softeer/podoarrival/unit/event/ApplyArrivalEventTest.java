@@ -2,7 +2,7 @@ package com.softeer.podoarrival.unit.event;
 
 import com.softeer.podoarrival.unit.base.ArrivalEventBase;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
-import com.softeer.podoarrival.event.service.ArrivalEventReleaseService;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceRedisImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -41,11 +41,13 @@ public class ApplyArrivalEventTest extends ArrivalEventBase {
         });
 
         // when
-        CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseService.applyEvent(authInfo);
+        CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseServiceRedisImpl.applyEvent(authInfo);
         ArrivalApplicationResponseDto response = responseFuture.get();  // 비동기 결과를 기다림
 
         // then
-        assertThat(response.getResponse()).isEqualTo("선착순 응모에 성공했습니다.");
+        assertThat(response.isSuccess()).isEqualTo(true);
+        assertThat(response.getName()).isEqualTo("user");
+        assertThat(response.getPhoneNum()).isEqualTo("01012345678");
         assertThat(response.getGrade()).isEqualTo(1);
     }
 
@@ -54,19 +56,21 @@ public class ApplyArrivalEventTest extends ArrivalEventBase {
     public void applyArrivalEventFail_Late() throws ExecutionException, InterruptedException {
         // given
         try {
-            java.lang.reflect.Field checkField = ArrivalEventReleaseService.class.getDeclaredField("CHECK");
+            java.lang.reflect.Field checkField = ArrivalEventReleaseServiceRedisImpl.class.getDeclaredField("CHECK");
             checkField.setAccessible(true); // private 필드 접근 허용
-            checkField.set(arrivalEventReleaseService, true); // 값 설정
+            checkField.set(arrivalEventReleaseServiceRedisImpl, true); // 값 설정
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
         // when
-        CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseService.applyEvent(authInfo);
+        CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseServiceRedisImpl.applyEvent(authInfo);
         ArrivalApplicationResponseDto response = responseFuture.get();  // 비동기 결과를 기다림
 
         // then
-        assertThat(response.getResponse()).isEqualTo("선착순 응모에 실패했습니다.");
+        assertThat(response.isSuccess()).isEqualTo(false);
+        assertThat(response.getName()).isEqualTo("user");
+        assertThat(response.getPhoneNum()).isEqualTo("01012345678");
         assertThat(response.getGrade()).isEqualTo(-1);
     }
 
@@ -90,7 +94,7 @@ public class ApplyArrivalEventTest extends ArrivalEventBase {
         });
 
         // when
-        CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseService.applyEvent(authInfo);
+        CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseServiceRedisImpl.applyEvent(authInfo);
 
         // then
         assertThatThrownBy(() -> responseFuture.get())

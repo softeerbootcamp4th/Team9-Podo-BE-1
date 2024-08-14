@@ -32,6 +32,7 @@ public class ArrivalEventController {
         return arrivalEventService.applyEvent(authInfo)
                 .thenApply(result -> new CommonResponse<>(result))
                 .exceptionally(ex -> {
+                    // 내부 예외 처리
                     if(ex.getCause() instanceof ExistingUserException) {
                         throw new ExistingUserException("[비동기 에러] 유저가 이미 존재합니다.");
                     } else {
