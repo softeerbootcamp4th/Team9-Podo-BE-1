@@ -51,7 +51,7 @@ public class ArrivalEventMaxArrivalScheduler {
             rewardCount += eventReward.getNumWinners();
         }
 
-        ArrivalEventReleaseServiceRedisImpl.setMaxArrival(rewordCount);
-        ArrivalEventReleaseServiceJavaImpl.setMaxArrival(rewordCount);
+        ArrivalEventReleaseServiceRedisImpl.setMaxArrival(rewardCount);
+        ArrivalEventReleaseServiceJavaImpl.setMaxArrival(rewardCount);
     }
 }
