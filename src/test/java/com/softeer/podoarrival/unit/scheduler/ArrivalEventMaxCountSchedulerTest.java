@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,25 +33,19 @@ public class ArrivalEventMaxCountSchedulerTest extends ArrivalEventMaxCountSched
         when(eventTypeRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(arrivalType));
         when(eventRepository.findFirstByEventTypeAndStartAtBetween(arrivalType, startOfDay, endOfDay))
-                .thenReturn(Event.builder()
-                        .id(1L)
-                        .title("셀토스 선착순 이벤트")
-                        .description("The 2025 셀토스 출시 기념 선착순 이벤트")
-                        .startAt(LocalDateTime.now())
-                        .endAt(LocalDateTime.now().plusDays(5))
-                        .build()
-                );
-        when(eventRewardRepository.countByEvent(any()))
-                .thenReturn(50);
+                .thenReturn(eventSample);
+        when(eventRewardRepository.findAllByEvent(eventSample))
+                .thenReturn(List.of(eventReward1, eventReward2));
+
 
         // when
         arrivalEventMaxArrivalScheduler.setEventArrivalCount();
 
         // then
         Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getMaxArrival())
-                .isEqualTo(50);
+                .isEqualTo(60);
         Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getMaxArrival())
-                .isEqualTo(50);
+                .isEqualTo(60);
     }
 
     @Test
@@ -66,8 +61,6 @@ public class ArrivalEventMaxCountSchedulerTest extends ArrivalEventMaxCountSched
                 .thenReturn(Optional.ofNullable(arrivalType));
         when(eventRepository.findFirstByEventTypeAndStartAtBetween(any(), any(), any()))
                 .thenReturn(null);
-        when(eventRewardRepository.countByEvent(any()))
-                .thenReturn(0);
 
         // when
         arrivalEventMaxArrivalScheduler.setEventArrivalCount();
