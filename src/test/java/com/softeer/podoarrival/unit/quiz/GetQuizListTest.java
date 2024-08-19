@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.unit.quiz;
 
+import com.softeer.podoarrival.event.exception.DailyQuizNotExistsException;
 import com.softeer.podoarrival.unit.base.QuizServiceBase;
 import com.softeer.podoarrival.event.model.dto.GetQuizResponseDto;
 import com.softeer.podoarrival.event.model.entity.Quiz;
@@ -85,7 +86,7 @@ public class GetQuizListTest extends QuizServiceBase{
 
         // when-then
         assertThatThrownBy(() -> quizService.getQuizInfo())
-                .isInstanceOf(NullPointerException.class);
+                .isInstanceOf(DailyQuizNotExistsException.class);
     }
 
 }
