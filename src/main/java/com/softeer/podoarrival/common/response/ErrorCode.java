@@ -24,7 +24,8 @@ public enum ErrorCode {
 
     //event_arrival
     PHONENUM_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(),"이미 응모한 전화번호입니다."),
-    QUIZ_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "오늘 날짜에 퀴즈가 없습니다.")
+    QUIZ_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "오늘 날짜에 퀴즈가 없습니다."),
+    EVENT_CLOSED(false, HttpStatus.FORBIDDEN.value(), "이벤트 시간이 아닙니다.")
     ;
 
 
