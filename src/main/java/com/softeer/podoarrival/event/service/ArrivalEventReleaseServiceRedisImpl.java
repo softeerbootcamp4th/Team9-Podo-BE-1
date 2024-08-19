@@ -61,9 +61,6 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
                 throw new ExistingUserException("이미 응모한 전화번호입니다.");
             }
 
-            // 로깅 추가
-            specialLogger.info("[응모] 유저 전화번호: {}", authInfo.getPhoneNum());
-
             int grade = (int) res.getResponses().get(1);
             // 선착순 순위에 들었다면
             if(grade <= MAX_ARRIVAL){
