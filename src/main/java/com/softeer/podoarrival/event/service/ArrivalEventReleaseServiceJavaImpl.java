@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.event.service;
 
+import com.softeer.podoarrival.event.exception.EventClosedException;
 import com.softeer.podoarrival.event.exception.ExistingUserException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.event.model.entity.ArrivalUser;
@@ -41,6 +42,8 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
     @Override
     public CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo) {
         return CompletableFuture.supplyAsync(() -> {
+            if(!START_DATE) throw new EventClosedException("이벤트 요일이 아닙니다.");
+            if(LocalTime.now().isBefore(START_TIME)) throw new EventClosedException("이벤트 시간이 아닙니다.");
 
             if(CHECK){
                 return new ArrivalApplicationResponseDto(false, authInfo.getName(), authInfo.getPhoneNum(), -1);
