@@ -28,10 +28,10 @@ public class ArrivalEventComplexServiceTest {
     private ArrivalEventService arrivalEventService;
 
     @Mock
-    private ArrivalEventReleaseServiceJavaImpl redisService;
+    private ArrivalEventReleaseServiceJavaImpl javaService;
 
     @Mock
-    private ArrivalEventReleaseServiceRedisImpl javaService;
+    private ArrivalEventReleaseServiceRedisImpl redisService;
 
     @Mock
     private RedissonClient redissonClient;
