@@ -23,7 +23,8 @@ public enum ErrorCode {
     USERNAME_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(), "이미 존재하는 닉네임입니다."),
 
     //event_arrival
-    PHONENUM_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(),"이미 응모한 전화번호입니다.")
+    PHONENUM_EXISTS_ERROR(false, HttpStatus.BAD_REQUEST.value(),"이미 응모한 전화번호입니다."),
+    QUIZ_NOT_FOUND(false, HttpStatus.NOT_FOUND.value(), "오늘 날짜에 퀴즈가 없습니다.")
     ;
 
 

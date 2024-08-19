@@ -36,6 +36,7 @@ public class ArrivalEventController {
                     if(ex.getCause() instanceof ExistingUserException) {
                         throw new ExistingUserException("[비동기 에러] 유저가 이미 존재합니다.");
                     } else {
+                        log.error("Exception occurred while arrival application", ex);
                         throw new AsyncRequestExecuteException("[비동기 에러] 선착순 요청 중 서버 오류 발생");
                     }
                 });
