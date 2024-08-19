@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +27,8 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
 
     private static int MAX_ARRIVAL = 100; // default
     private boolean CHECK = false;
+    private static LocalTime START_TIME = LocalTime.of(0, 0);
+    private static boolean START_DATE = true;
 
     private static AtomicInteger count = new AtomicInteger(1);
     private static ConcurrentHashMap<String, Integer> hashMap = new ConcurrentHashMap<>();
@@ -70,6 +73,14 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
 
     public static void setMaxArrival(int val) {
         MAX_ARRIVAL = val;
+    }
+
+    public static void setStartTime(LocalTime val) {
+        START_TIME = val;
+    }
+
+    public static void setStartDate(Boolean val) {
+        START_DATE = val;
     }
 
     public static int getMaxArrival() {

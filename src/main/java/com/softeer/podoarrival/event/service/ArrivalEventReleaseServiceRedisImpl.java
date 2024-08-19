@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -32,6 +33,8 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
     private final String ARRIVAL_SET = "arrivalset";
     private boolean CHECK = false;
     private static int MAX_ARRIVAL = 100; // default
+    private static LocalTime START_TIME = LocalTime.of(0, 0);
+    private static boolean START_DATE = true;
 
     /**
      * 비동기로 Redis 호출하는 메서드
@@ -83,6 +86,14 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
 
     public static void setMaxArrival(int val) {
         MAX_ARRIVAL = val;
+    }
+
+    public static void setStartTime(LocalTime val) {
+        START_TIME = val;
+    }
+
+    public static void setStartDate(Boolean val) {
+        START_DATE = val;
     }
 
     public static int getMaxArrival() {
