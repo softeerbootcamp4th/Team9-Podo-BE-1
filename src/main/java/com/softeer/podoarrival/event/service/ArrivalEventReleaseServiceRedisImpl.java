@@ -96,4 +96,12 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
     public static int getMaxArrival() {
         return MAX_ARRIVAL;
     }
+
+    public static LocalTime getStartTime() {
+        return START_TIME;
+    }
+
+    public static boolean getStartDate() {
+        return START_DATE;
+    }
 }
