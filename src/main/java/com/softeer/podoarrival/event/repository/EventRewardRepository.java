@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface EventRewardRepository extends JpaRepository<EventReward, Long> {
-	int countByEvent(Event event);
-    List<EventReward> findAllByEvent(Event event);
+	List<EventReward> findAllByEvent(Event event);
 }
