@@ -48,6 +48,8 @@ public class ArrivalEventInformationScheduler {
 
         if(findEvent == null) {
             log.warn("오늘 날짜에 이벤트가 없습니다.");
+            ArrivalEventReleaseServiceRedisImpl.setMaxArrival(0);
+            ArrivalEventReleaseServiceJavaImpl.setMaxArrival(0);
             return;
         }
 
