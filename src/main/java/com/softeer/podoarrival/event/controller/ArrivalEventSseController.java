@@ -19,7 +19,7 @@ public class ArrivalEventSseController {
 
 	@GetMapping(value = "/time", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@Operation(summary = "선착순 서버시간 SSE Api")
-	public Flux<Long> streamServerTime() {
-		return arrivalEventService.streamServerTime();
+	public Flux<Long> streamLeftSecondsToEventTime() {
+		return arrivalEventService.streamLeftSecondsToEventTime();
 	}
 }

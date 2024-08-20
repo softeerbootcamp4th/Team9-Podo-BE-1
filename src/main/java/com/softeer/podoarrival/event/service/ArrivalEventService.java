@@ -32,7 +32,7 @@ public class ArrivalEventService {
      * SSE로 서버시간기준 이벤트 시작 시간까지 남은 시간을 전송
      * @return sse로 전송하게되는 이벤트까지 남은 시간
      */
-    public Flux<Long> streamServerTime() {
+    public Flux<Long> streamLeftSecondsToEventTime() {
         return Flux.concat(
                 Flux.just(0L), // Emit initial value immediately
                 Flux.interval(Duration.ofSeconds(20)))
