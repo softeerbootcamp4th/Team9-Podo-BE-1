@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.event.service;
 
+import com.softeer.podoarrival.event.exception.EventClosedException;
 import com.softeer.podoarrival.event.exception.ExistingUserException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.event.model.entity.ArrivalUser;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -32,6 +34,8 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
     private final String ARRIVAL_SET = "arrivalset";
     private boolean CHECK = false;
     private static int MAX_ARRIVAL = 100; // default
+    private static LocalTime START_TIME = LocalTime.of(0, 0);
+    private static boolean START_DATE = true;
 
     /**
      * 비동기로 Redis 호출하는 메서드
@@ -43,6 +47,9 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
     public CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo) {
         return CompletableFuture.supplyAsync(() -> {
             String redisKey = LocalDate.now() + ARRIVAL_SET;
+
+            if(!START_DATE) throw new EventClosedException("이벤트 요일이 아닙니다.");
+            if(LocalTime.now().isBefore(START_TIME)) throw new EventClosedException("이벤트 시간이 아닙니다.");
 
             if(CHECK){
                 return new ArrivalApplicationResponseDto(false, authInfo.getName(), authInfo.getPhoneNum(), -1);
@@ -57,9 +64,6 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
             if(!(boolean) res.getResponses().get(0)){
                 throw new ExistingUserException("이미 응모한 전화번호입니다.");
             }
-
-            // 로깅 추가
-            specialLogger.info("[응모] 유저 전화번호: {}", authInfo.getPhoneNum());
 
             int grade = (int) res.getResponses().get(1);
             // 선착순 순위에 들었다면
@@ -85,7 +89,23 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
         MAX_ARRIVAL = val;
     }
 
+    public static void setStartTime(LocalTime val) {
+        START_TIME = val;
+    }
+
+    public static void setStartDate(Boolean val) {
+        START_DATE = val;
+    }
+
     public static int getMaxArrival() {
         return MAX_ARRIVAL;
+    }
+
+    public static LocalTime getStartTime() {
+        return START_TIME;
+    }
+
+    public static boolean getStartDate() {
+        return START_DATE;
     }
 }

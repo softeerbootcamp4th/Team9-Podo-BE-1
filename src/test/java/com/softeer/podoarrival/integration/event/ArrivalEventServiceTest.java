@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.integration.event;
 
+import com.softeer.podoarrival.event.exception.EventClosedException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.event.model.entity.Role;
 import com.softeer.podoarrival.event.repository.ArrivalUserRepository;
@@ -10,6 +11,7 @@ import com.softeer.podoarrival.security.AuthInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -19,15 +21,22 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mockStatic;
 
 @SpringBootTest
 @ContextConfiguration(classes = {ArrivalEventServiceTest.TestConfig.class})
@@ -47,6 +56,9 @@ class ArrivalEventServiceTest {
 
     @Autowired
     private ArrivalUserRepository arrivalUserRepository;
+
+    @MockBean
+    private LocalTime localTime;
 
     @AfterEach
     void tearDown() {
@@ -73,7 +85,7 @@ class ArrivalEventServiceTest {
                 try {
                     CompletableFuture<ArrivalApplicationResponseDto> futureResponse = redisEventService.applyEvent(
                             new AuthInfo(
-                                    "teat" + userId,
+                                    "test" + userId,
                                     "010-1234-5678-" + userId,
                                     Role.ROLE_USER
                             )
@@ -108,7 +120,7 @@ class ArrivalEventServiceTest {
                 try {
                     CompletableFuture<ArrivalApplicationResponseDto> futureResponse = javaEventService.applyEvent(
                             new AuthInfo(
-                                    "teat" + userId,
+                                    "test" + userId,
                                     "010-1234-5678-" + userId,
                                     Role.ROLE_USER
                             )
@@ -125,6 +137,30 @@ class ArrivalEventServiceTest {
 
         //then
         assertEquals(MAX_COUNT, count.get());
+    }
+
+    @Test
+    @DisplayName("선착순 api 시간 외 오류 테스트")
+    void eventOutOfTimeTest() throws NoSuchFieldException, IllegalAccessException {
+        //given
+        Field startDate = ArrivalEventReleaseServiceRedisImpl.class.getDeclaredField("START_DATE");
+        Field startTime = ArrivalEventReleaseServiceRedisImpl.class.getDeclaredField("START_TIME");
+        startDate.setAccessible(true); // private 필드를 접근 가능하도록 설정
+        startTime.setAccessible(true);
+        startDate.set(redisEventService, true);  // private 필드 값을 변경
+        startTime.set(redisEventService, LocalTime.now().plusHours(1));
+
+        //when
+        CompletableFuture<ArrivalApplicationResponseDto> futureResponse = redisEventService.applyEvent(
+                new AuthInfo(
+                        "test",
+                        "010-1234-5678-",
+                        Role.ROLE_USER
+                )
+        );
+
+        //then
+        assertThrows(ExecutionException.class, futureResponse::get);
     }
 
     @Configuration

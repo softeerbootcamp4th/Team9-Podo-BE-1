@@ -1,5 +1,6 @@
 package com.softeer.podoarrival.event.service;
 
+import com.softeer.podoarrival.event.exception.EventClosedException;
 import com.softeer.podoarrival.event.exception.ExistingUserException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.event.model.entity.ArrivalUser;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +28,8 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
 
     private static int MAX_ARRIVAL = 100; // default
     private boolean CHECK = false;
+    private static LocalTime START_TIME = LocalTime.of(0, 0);
+    private static boolean START_DATE = true;
 
     private static AtomicInteger count = new AtomicInteger(1);
     private static ConcurrentHashMap<String, Integer> hashMap = new ConcurrentHashMap<>();
@@ -38,6 +42,8 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
     @Override
     public CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo) {
         return CompletableFuture.supplyAsync(() -> {
+            if(!START_DATE) throw new EventClosedException("이벤트 요일이 아닙니다.");
+            if(LocalTime.now().isBefore(START_TIME)) throw new EventClosedException("이벤트 시간이 아닙니다.");
 
             if(CHECK){
                 return new ArrivalApplicationResponseDto(false, authInfo.getName(), authInfo.getPhoneNum(), -1);
@@ -72,7 +78,24 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
         MAX_ARRIVAL = val;
     }
 
+    public static void setStartTime(LocalTime val) {
+        START_TIME = val;
+    }
+
+    public static void setStartDate(Boolean val) {
+        START_DATE = val;
+    }
+
     public static int getMaxArrival() {
         return MAX_ARRIVAL;
+    }
+
+
+    public static LocalTime getStartTime() {
+        return START_TIME;
+    }
+
+    public static boolean getStartDate() {
+        return START_DATE;
     }
 }

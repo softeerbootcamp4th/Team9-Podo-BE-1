@@ -5,7 +5,7 @@ import com.softeer.podoarrival.event.model.entity.EventReward;
 import com.softeer.podoarrival.event.repository.EventRepository;
 import com.softeer.podoarrival.event.repository.EventRewardRepository;
 import com.softeer.podoarrival.event.repository.EventTypeRepository;
-import com.softeer.podoarrival.event.scheduler.ArrivalEventMaxArrivalScheduler;
+import com.softeer.podoarrival.event.scheduler.ArrivalEventInformationScheduler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,10 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @ExtendWith(MockitoExtension.class)
-public class ArrivalEventMaxCountSchedulerBase {
+public class ArrivalEventInformationBase {
 
     @Mock
     protected EventRepository eventRepository;
@@ -28,7 +30,7 @@ public class ArrivalEventMaxCountSchedulerBase {
     protected EventTypeRepository eventTypeRepository;
 
     @InjectMocks
-    protected ArrivalEventMaxArrivalScheduler arrivalEventMaxArrivalScheduler;
+    protected ArrivalEventInformationScheduler arrivalEventInformationScheduler;
 
     protected Event eventSample;
     protected EventReward eventReward1;
@@ -42,6 +44,8 @@ public class ArrivalEventMaxCountSchedulerBase {
                 .description("The 2025 셀토스 출시 기념 선착순 이벤트")
                 .startAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now().plusDays(5))
+                .repeatTime(LocalTime.of(15, 0))
+                .repeatDay("1111111")
                 .build();
 
         eventReward1 = EventReward.builder()

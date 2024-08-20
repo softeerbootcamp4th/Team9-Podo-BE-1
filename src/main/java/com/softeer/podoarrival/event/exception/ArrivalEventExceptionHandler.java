@@ -34,4 +34,11 @@ public class ArrivalEventExceptionHandler {
         log.warn("ARRIVAL-003> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
         return new CommonResponse<>(ErrorCode.QUIZ_NOT_FOUND);
     }
+
+    @ExceptionHandler(EventClosedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public CommonResponse<?> eventClosedException(EventClosedException e, HttpServletRequest request) {
+        log.warn("ARRIVAL-004> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
+        return new CommonResponse<>(ErrorCode.EVENT_CLOSED);
+    }
 }
