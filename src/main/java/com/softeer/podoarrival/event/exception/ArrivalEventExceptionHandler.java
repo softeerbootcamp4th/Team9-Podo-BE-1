@@ -18,27 +18,27 @@ public class ArrivalEventExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponse<?> existingUserException(ExistingUserException e, HttpServletRequest request) {
         log.warn("ARRIVAL-001> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
-        return new CommonResponse<>(ErrorCode.PHONENUM_EXISTS_ERROR);
+        return new CommonResponse<>(ErrorCode.PHONENUM_EXISTS_ERROR, e.getMessage());
     }
 
     @ExceptionHandler(AsyncRequestExecuteException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResponse<?> asyncRequestExecuteException(AsyncRequestExecuteException e, HttpServletRequest request) {
         log.warn("ARRIVAL-002> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
-        return new CommonResponse<>(ErrorCode.INTERNAL_SERVER_ERROR);
+        return new CommonResponse<>(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     @ExceptionHandler(DailyQuizNotExistsException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public CommonResponse<?> dailyQuizNotFoundException(DailyQuizNotExistsException e, HttpServletRequest request) {
         log.warn("ARRIVAL-003> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
-        return new CommonResponse<>(ErrorCode.QUIZ_NOT_FOUND);
+        return new CommonResponse<>(ErrorCode.QUIZ_NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(EventClosedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public CommonResponse<?> eventClosedException(EventClosedException e, HttpServletRequest request) {
         log.warn("ARRIVAL-004> 요청 URI: " + request.getRequestURI() + ", 에러 메세지: " + e.getMessage());
-        return new CommonResponse<>(ErrorCode.EVENT_CLOSED);
+        return new CommonResponse<>(ErrorCode.EVENT_CLOSED, e.getMessage());
     }
 }
