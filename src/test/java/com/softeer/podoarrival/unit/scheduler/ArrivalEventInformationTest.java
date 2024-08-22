@@ -48,9 +48,9 @@ public class ArrivalEventInformationTest extends ArrivalEventInformationBase {
                 .isEqualTo(60);
         Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getMaxArrival())
                 .isEqualTo(60);
-        Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getStartTime())
+        Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getStartTimeStatic())
                 .isEqualTo(LocalTime.of(15, 0));
-        Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getStartTime())
+        Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getStartTimeStatic())
                 .isEqualTo(LocalTime.of(15, 0));
     }
 

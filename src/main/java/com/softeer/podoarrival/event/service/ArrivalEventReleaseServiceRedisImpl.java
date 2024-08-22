@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,7 +35,7 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
     private final String ARRIVAL_SET = "arrivalset";
     private boolean CHECK = false;
     private static int MAX_ARRIVAL = 100; // default
-    private static LocalTime START_TIME = LocalTime.of(0, 0);
+    private static LocalDateTime START_TIME = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
     private static boolean START_DATE = true;
 
     /**
@@ -49,7 +50,7 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
             String redisKey = LocalDate.now() + ARRIVAL_SET;
 
             if(!START_DATE) throw new EventClosedException("이벤트 요일이 아닙니다.");
-            if(LocalTime.now().isBefore(START_TIME)) throw new EventClosedException("이벤트 시간이 아닙니다.");
+            if(LocalDateTime.now().isBefore(START_TIME)) throw new EventClosedException("이벤트 시간이 아닙니다.");
 
             if(CHECK){
                 return new ArrivalApplicationResponseDto(false, authInfo.getName(), authInfo.getPhoneNum(), -1);
@@ -80,6 +81,7 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
                 return new ArrivalApplicationResponseDto(true, authInfo.getName(), authInfo.getPhoneNum(), grade);
             } else {
                 CHECK = true;
+                START_TIME = LocalDateTime.of(LocalDate.now().plusDays(1), START_TIME.toLocalTime());
                 return new ArrivalApplicationResponseDto(false, authInfo.getName(), authInfo.getPhoneNum(), grade);
             }
         });
@@ -89,7 +91,7 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
         MAX_ARRIVAL = val;
     }
 
-    public static void setStartTime(LocalTime val) {
+    public static void setStartTime(LocalDateTime val) {
         START_TIME = val;
     }
 
@@ -101,7 +103,11 @@ public class ArrivalEventReleaseServiceRedisImpl implements ArrivalEventReleaseS
         return MAX_ARRIVAL;
     }
 
-    public static LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
+        return START_TIME;
+    }
+
+    public static LocalDateTime getStartTimeStatic(){
         return START_TIME;
     }
 

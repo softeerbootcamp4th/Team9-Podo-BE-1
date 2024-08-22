@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -37,8 +37,8 @@ public class ArrivalEventService {
                 Flux.just(0L), // Emit initial value immediately
                 Flux.interval(Duration.ofSeconds(20)))
                 .map(sequence -> {
-                    LocalTime startTime = ArrivalEventReleaseServiceJavaImpl.getStartTime();
-                    long seconds = Duration.between(LocalTime.now(), startTime).getSeconds();
+                    LocalDateTime startTime = arrivalEventReleaseServiceRedisImpl.getStartTime();
+                    long seconds = Duration.between(LocalDateTime.now(), startTime).getSeconds();
                     return Math.max(seconds, 0);
                 });
     }
