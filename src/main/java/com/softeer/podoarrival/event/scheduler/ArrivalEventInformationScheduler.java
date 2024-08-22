@@ -78,7 +78,7 @@ public class ArrivalEventInformationScheduler {
         ArrivalEventReleaseServiceRedisImpl.setMaxArrival(rewardCount);
         ArrivalEventReleaseServiceJavaImpl.setMaxArrival(rewardCount);
 
-        ArrivalEventReleaseServiceRedisImpl.setStartTime(repeatTime);
-        ArrivalEventReleaseServiceJavaImpl.setStartTime(repeatTime);
+        ArrivalEventReleaseServiceRedisImpl.setStartTime(LocalDateTime.of(LocalDate.now(), repeatTime));
+        ArrivalEventReleaseServiceJavaImpl.setStartTime(LocalDateTime.of(LocalDate.now(), repeatTime));
     }
 }

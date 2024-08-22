@@ -3,6 +3,7 @@ package com.softeer.podoarrival.event.controller;
 
 import com.softeer.podoarrival.common.response.CommonResponse;
 import com.softeer.podoarrival.event.exception.AsyncRequestExecuteException;
+import com.softeer.podoarrival.event.exception.EventClosedException;
 import com.softeer.podoarrival.event.exception.ExistingUserException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.event.service.ArrivalEventService;
@@ -35,6 +36,8 @@ public class ArrivalEventController {
                     // 내부 예외 처리
                     if(ex.getCause() instanceof ExistingUserException) {
                         throw new ExistingUserException("[비동기 에러] 유저가 이미 존재합니다.");
+                    } else if(ex.getCause() instanceof EventClosedException){
+                        throw new EventClosedException(ex.getMessage());
                     } else {
                         log.error("Exception occurred while arrival application", ex);
                         throw new AsyncRequestExecuteException("[비동기 에러] 선착순 요청 중 서버 오류 발생");
