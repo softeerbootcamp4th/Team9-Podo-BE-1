@@ -6,12 +6,6 @@ server:
       max: 200 # 작업 스레드
 #    accept-count: 500000 # 요청 대기 큐 크기
 #    connection-timeout: 600000 # 연결 타임아웃 (밀리초)
-  ssl:
-    enabled: true
-    key-store: ../arrival-server.p12
-    key-store-password: teampodo
-    key-store-type: PKCS12
-    key-alias: softeerbootcamp4th
 
 spring:
   application:
