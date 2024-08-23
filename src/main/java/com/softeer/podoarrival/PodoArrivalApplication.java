@@ -30,7 +30,7 @@ public class PodoArrivalApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8000", "https://www.hyundaiseltos.site")  // 허용할 도메인
+                        .allowedOrigins("http://localhost:8000", "https://www.hyundaiseltos.site", "https://d3u0wfxb13l271.cloudfront.net")  // 허용할 도메인
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // 허용할 HTTP 메소드
                         .allowedHeaders("*"); // 허용할 헤더
             }
