@@ -10,5 +10,19 @@ public interface ArrivalEventReleaseService {
 
     CompletableFuture<ArrivalApplicationResponseDto> applyEvent(AuthInfo authInfo);
 
-    public LocalDateTime getStartTime();
+    void setMaxArrival(int val);
+
+    void setStartTime(LocalDateTime val);
+
+    void setStartDate(Boolean val);
+
+    int getMaxArrival();
+
+    void setCheckFlag(boolean flag);
+
+    LocalDateTime getStartTime();
+
+    LocalDateTime getStartTimeStatic();
+
+    boolean getStartDate();
 }
