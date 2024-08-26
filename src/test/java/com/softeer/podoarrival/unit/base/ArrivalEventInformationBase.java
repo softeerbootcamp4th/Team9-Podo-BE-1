@@ -5,7 +5,9 @@ import com.softeer.podoarrival.event.model.entity.EventReward;
 import com.softeer.podoarrival.event.repository.EventRepository;
 import com.softeer.podoarrival.event.repository.EventRewardRepository;
 import com.softeer.podoarrival.event.repository.EventTypeRepository;
-import com.softeer.podoarrival.event.scheduler.ArrivalEventInformationScheduler;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseService;
+import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceRedisImpl;
+import com.softeer.podoarrival.event.service.ArrivalEventService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,11 @@ import java.time.LocalTime;
 @ExtendWith(MockitoExtension.class)
 public class ArrivalEventInformationBase {
 
+    protected boolean CHECK;
+    protected boolean START_DATE;
+    protected LocalDateTime START_TIME;
+    protected int REWORD_COUNT;
+
     @Mock
     protected EventRepository eventRepository;
 
@@ -29,8 +36,11 @@ public class ArrivalEventInformationBase {
     @Mock
     protected EventTypeRepository eventTypeRepository;
 
+    @Mock
+    protected ArrivalEventReleaseServiceRedisImpl arrivalEventReleaseServiceImpl;
+
     @InjectMocks
-    protected ArrivalEventInformationScheduler arrivalEventInformationScheduler;
+    protected ArrivalEventService arrivalEventService;
 
     protected Event eventSample;
     protected EventReward eventReward1;

@@ -3,6 +3,9 @@ package com.softeer.podoarrival.unit.event;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.event.model.entity.Role;
 import com.softeer.podoarrival.event.repository.ArrivalUserRepository;
+import com.softeer.podoarrival.event.repository.EventRepository;
+import com.softeer.podoarrival.event.repository.EventRewardRepository;
+import com.softeer.podoarrival.event.repository.EventTypeRepository;
 import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceJavaImpl;
 import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceRedisImpl;
 import com.softeer.podoarrival.event.service.ArrivalEventService;
@@ -39,6 +42,15 @@ public class ArrivalEventComplexServiceTest {
     @Mock
     private ArrivalUserRepository arrivalUserRepository;
 
+    @Mock
+    private EventTypeRepository eventTypeRepository;
+
+    @Mock
+    private EventRewardRepository eventRewardRepository;
+
+    @Mock
+    private EventRepository eventRepository;
+
     private AuthInfo authInfo;
     private ArrivalApplicationResponseDto expectedResponse;
 
@@ -53,7 +65,7 @@ public class ArrivalEventComplexServiceTest {
     public void testApplyEventWithRedisImplementations_Success() {
         // given
         doReturn(CompletableFuture.completedFuture(expectedResponse)).when(redisService).applyEvent(authInfo);
-        arrivalEventService = new ArrivalEventService(redisService);
+        arrivalEventService = new ArrivalEventService(redisService, eventTypeRepository, eventRewardRepository, eventRepository);
 
         // when
         CompletableFuture<ArrivalApplicationResponseDto> result = arrivalEventService.applyEvent(authInfo);
@@ -67,7 +79,7 @@ public class ArrivalEventComplexServiceTest {
     public void testApplyEventWithJavaImplementations_Success() {
         // given
         doReturn(CompletableFuture.completedFuture(expectedResponse)).when(javaService).applyEvent(authInfo);
-        arrivalEventService = new ArrivalEventService(javaService);
+        arrivalEventService = new ArrivalEventService(javaService, eventTypeRepository, eventRewardRepository, eventRepository);
 
         // when
         CompletableFuture<ArrivalApplicationResponseDto> result = arrivalEventService.applyEvent(authInfo);
