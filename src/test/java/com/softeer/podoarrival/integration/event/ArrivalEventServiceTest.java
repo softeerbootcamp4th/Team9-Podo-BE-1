@@ -61,6 +61,12 @@ class ArrivalEventServiceTest {
     @Autowired
     private ArrivalUserRepository arrivalUserRepository;
 
+    @Autowired
+    private ArrivalEventReleaseServiceRedisImpl arrivalEventReleaseServiceRedis;
+
+    @Autowired
+    private ArrivalEventReleaseServiceJavaImpl arrivalEventReleaseServiceJava;
+
     @MockBean
     private LocalTime localTime;
 
@@ -81,6 +87,7 @@ class ArrivalEventServiceTest {
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
         AtomicInteger count = new AtomicInteger();
+        arrivalEventReleaseServiceRedis.setStartTime(LocalDateTime.now());
 
         //when
         for (int i = 0; i < threadCount; i++) {
@@ -116,6 +123,8 @@ class ArrivalEventServiceTest {
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
         AtomicInteger count = new AtomicInteger();
+        arrivalEventReleaseServiceJava.setStartTime(LocalDateTime.now());
+
 
         //when
         for (int i = 0; i < threadCount; i++) {
@@ -147,12 +156,7 @@ class ArrivalEventServiceTest {
     @DisplayName("선착순 api 시간 외 오류 테스트")
     void eventOutOfTimeTest() throws NoSuchFieldException, IllegalAccessException {
         //given
-        Field startDate = ArrivalEventReleaseServiceRedisImpl.class.getDeclaredField("START_DATE");
-        Field startTime = ArrivalEventReleaseServiceRedisImpl.class.getDeclaredField("START_TIME");
-        startDate.setAccessible(true); // private 필드를 접근 가능하도록 설정
-        startTime.setAccessible(true);
-        startDate.set(redisEventService, true);  // private 필드 값을 변경
-        startTime.set(redisEventService, LocalTime.now().plusHours(1));
+        arrivalEventReleaseServiceRedis.setStartTime(LocalDateTime.now().plusHours(1));
 
         //when
         CompletableFuture<ArrivalApplicationResponseDto> futureResponse = redisEventService.applyEvent(
