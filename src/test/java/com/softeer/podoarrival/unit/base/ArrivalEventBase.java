@@ -40,6 +40,6 @@ public class ArrivalEventBase {
     @BeforeEach
     public void setUp() {
         authInfo = new AuthInfo("user", "01012345678", Role.ROLE_USER);
-        ArrivalEventReleaseServiceRedisImpl.setMaxArrival(5);
+        arrivalEventReleaseServiceRedisImpl.setMaxArrival(5);
     }
 }

@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ArrivalEventInformationTest extends ArrivalEventInformationBase {
 
@@ -32,6 +34,30 @@ public class ArrivalEventInformationTest extends ArrivalEventInformationBase {
                 .type("arrival")
                 .build();
 
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                CHECK = false;
+                return null;
+            }
+        }).when(arrivalEventReleaseServiceImpl).setCheckFlag(false);
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                START_DATE = true;
+                return null;
+            }
+        }).when(arrivalEventReleaseServiceImpl).setStartDate(true);
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                START_TIME = LocalDateTime.of(LocalDate.now(), LocalTime.of(13, 0));
+                return null;
+            }
+        }).when(arrivalEventReleaseServiceImpl).setStartTime(LocalDateTime.of(LocalDate.now(), LocalTime.of(13, 0)));
+
         when(eventTypeRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(arrivalType));
         when(eventRepository.findFirstByEventTypeAndStartAtBetween(arrivalType, startOfDay, endOfDay))
@@ -39,19 +65,32 @@ public class ArrivalEventInformationTest extends ArrivalEventInformationBase {
         when(eventRewardRepository.findAllByEvent(eventSample))
                 .thenReturn(List.of(eventReward1, eventReward2));
 
+        doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                REWORD_COUNT = 60;
+                return null;
+            }
+        }).when(arrivalEventReleaseServiceImpl).setMaxArrival(60);
+
+//        when(arrivalEventReleaseServiceImpl.setMaxArrival(any()))
+//                .thenAnswer(
+//                        new Answer() {
+//                            @Override
+//                            public Void answer(InvocationOnMock invocation) throws Throwable {
+//                                REWORD_COUNT = (int) invocation.getArguments()[0];
+//                            }
+//                        }
+//                );
 
         // when
-        arrivalEventInformationScheduler.setArrivalEventInformation();
+        arrivalEventService.setArrivalEventInformation();
 
         // then
-        Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getMaxArrival())
+        Assertions.assertThat(REWORD_COUNT)
                 .isEqualTo(60);
-        Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getMaxArrival())
-                .isEqualTo(60);
-        Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getStartTimeStatic())
-                .isEqualTo(LocalTime.of(15, 0));
-        Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getStartTimeStatic())
-                .isEqualTo(LocalTime.of(15, 0));
+        Assertions.assertThat(START_TIME)
+                .isEqualTo(LocalDateTime.of(LocalDate.now(), LocalTime.of(13, 0)));
     }
 
     @Test
@@ -70,12 +109,12 @@ public class ArrivalEventInformationTest extends ArrivalEventInformationBase {
                 .thenReturn(null);
 
         // when
-        arrivalEventInformationScheduler.setArrivalEventInformation();
+        arrivalEventService.setArrivalEventInformation();
 
         // then
-        Assertions.assertThat(ArrivalEventReleaseServiceRedisImpl.getMaxArrival())
+        Assertions.assertThat(arrivalEventReleaseServiceImpl.getMaxArrival())
                 .isEqualTo(0);
-        Assertions.assertThat(ArrivalEventReleaseServiceJavaImpl.getMaxArrival())
+        Assertions.assertThat(arrivalEventReleaseServiceImpl.getMaxArrival())
                 .isEqualTo(0);
     }
 }

@@ -4,6 +4,9 @@ import com.softeer.podoarrival.event.exception.EventClosedException;
 import com.softeer.podoarrival.event.model.dto.ArrivalApplicationResponseDto;
 import com.softeer.podoarrival.event.model.entity.Role;
 import com.softeer.podoarrival.event.repository.ArrivalUserRepository;
+import com.softeer.podoarrival.event.repository.EventRepository;
+import com.softeer.podoarrival.event.repository.EventRewardRepository;
+import com.softeer.podoarrival.event.repository.EventTypeRepository;
 import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceJavaImpl;
 import com.softeer.podoarrival.event.service.ArrivalEventReleaseServiceRedisImpl;
 import com.softeer.podoarrival.event.service.ArrivalEventService;
@@ -11,6 +14,7 @@ import com.softeer.podoarrival.security.AuthInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.redisson.Redisson;
@@ -57,6 +61,12 @@ class ArrivalEventServiceTest {
     @Autowired
     private ArrivalUserRepository arrivalUserRepository;
 
+    @Autowired
+    private ArrivalEventReleaseServiceRedisImpl arrivalEventReleaseServiceRedis;
+
+    @Autowired
+    private ArrivalEventReleaseServiceJavaImpl arrivalEventReleaseServiceJava;
+
     @MockBean
     private LocalTime localTime;
 
@@ -77,6 +87,7 @@ class ArrivalEventServiceTest {
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
         AtomicInteger count = new AtomicInteger();
+        arrivalEventReleaseServiceRedis.setStartTime(LocalDateTime.now());
 
         //when
         for (int i = 0; i < threadCount; i++) {
@@ -112,6 +123,8 @@ class ArrivalEventServiceTest {
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
         AtomicInteger count = new AtomicInteger();
+        arrivalEventReleaseServiceJava.setStartTime(LocalDateTime.now());
+
 
         //when
         for (int i = 0; i < threadCount; i++) {
@@ -143,12 +156,7 @@ class ArrivalEventServiceTest {
     @DisplayName("선착순 api 시간 외 오류 테스트")
     void eventOutOfTimeTest() throws NoSuchFieldException, IllegalAccessException {
         //given
-        Field startDate = ArrivalEventReleaseServiceRedisImpl.class.getDeclaredField("START_DATE");
-        Field startTime = ArrivalEventReleaseServiceRedisImpl.class.getDeclaredField("START_TIME");
-        startDate.setAccessible(true); // private 필드를 접근 가능하도록 설정
-        startTime.setAccessible(true);
-        startDate.set(redisEventService, true);  // private 필드 값을 변경
-        startTime.set(redisEventService, LocalTime.now().plusHours(1));
+        arrivalEventReleaseServiceRedis.setStartTime(LocalDateTime.now().plusHours(1));
 
         //when
         CompletableFuture<ArrivalApplicationResponseDto> futureResponse = redisEventService.applyEvent(
@@ -169,13 +177,23 @@ class ArrivalEventServiceTest {
         @Bean
         @Qualifier("redisEventService")
         public ArrivalEventService arrivalEventRedisService(ArrivalEventReleaseServiceRedisImpl arrivalEventReleaseServiceRedisImpl) {
-            return new ArrivalEventService(arrivalEventReleaseServiceRedisImpl);
+            return new ArrivalEventService(
+                    arrivalEventReleaseServiceRedisImpl,
+                    eventTypeRepository,
+                    eventRewardRepository,
+                    eventRepository
+            );
         }
 
         @Bean
         @Qualifier("javaEventService")
         public ArrivalEventService arrivalEventJavaService(ArrivalEventReleaseServiceJavaImpl arrivalEventReleaseServiceJavaImpl) {
-            return new ArrivalEventService(arrivalEventReleaseServiceJavaImpl);
+            return new ArrivalEventService(
+                    arrivalEventReleaseServiceJavaImpl,
+                    eventTypeRepository,
+                    eventRewardRepository,
+                    eventRepository
+            );
         }
 
         @Bean
@@ -187,6 +205,15 @@ class ArrivalEventServiceTest {
         public ArrivalEventReleaseServiceJavaImpl arrivalEventReleaseServiceJavaImpl() {
             return new ArrivalEventReleaseServiceJavaImpl(arrivalUserRepository());
         }
+
+        @MockBean
+        public EventTypeRepository eventTypeRepository;
+
+        @MockBean
+        public EventRewardRepository eventRewardRepository;
+
+        @MockBean
+        public EventRepository eventRepository;
 
         @Bean
         public RedissonClient redisson() {

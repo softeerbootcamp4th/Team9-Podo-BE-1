@@ -28,10 +28,10 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
 
     private final ArrivalUserRepository arrivalUserRepository;
 
-    private static int MAX_ARRIVAL = 100; // default
+    private int MAX_ARRIVAL = 100; // default
     private boolean CHECK = false;
-    private static LocalDateTime START_TIME = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
-    private static boolean START_DATE = true;
+    private LocalDateTime START_TIME = LocalDateTime.of(LocalDate.now(), LocalTime.of(13, 0));
+    private boolean START_DATE = true;
 
     private static AtomicInteger count = new AtomicInteger(1);
     private static ConcurrentHashMap<String, Integer> hashMap = new ConcurrentHashMap<>();
@@ -77,32 +77,36 @@ public class ArrivalEventReleaseServiceJavaImpl implements ArrivalEventReleaseSe
         });
     }
 
-    public static void setMaxArrival(int val) {
+    public void setMaxArrival(int val) {
         MAX_ARRIVAL = val;
     }
 
-    public static void setStartTime(LocalDateTime val) {
+    public void setStartTime(LocalDateTime val) {
         START_TIME = val;
     }
 
-    public static void setStartDate(Boolean val) {
+    public void setStartDate(Boolean val) {
         START_DATE = val;
     }
 
-    public static int getMaxArrival() {
-        return MAX_ARRIVAL;
+    public void setCheckFlag(boolean flag) {
+        CHECK = flag;
     }
 
+    public int getMaxArrival() {
+        return MAX_ARRIVAL;
+    }
 
     public LocalDateTime getStartTime() {
         return START_TIME;
     }
 
-    public static LocalDateTime getStartTimeStatic(){
+    public LocalDateTime getStartTimeStatic(){
         return START_TIME;
     }
 
-    public static boolean getStartDate() {
+    public boolean getStartDate() {
         return START_DATE;
     }
+
 }
