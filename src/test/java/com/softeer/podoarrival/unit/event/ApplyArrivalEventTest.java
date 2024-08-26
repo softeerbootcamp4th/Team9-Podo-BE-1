@@ -9,6 +9,9 @@ import org.mockito.stubbing.Answer;
 import org.redisson.api.BatchResult;
 import org.redisson.api.RSetAsync;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -39,6 +42,8 @@ public class ApplyArrivalEventTest extends ArrivalEventBase {
             when(result.getResponses()).thenReturn(Arrays.asList(true, 1));
             return result;
         });
+        arrivalEventReleaseServiceRedisImpl.setStartDate(true);
+        arrivalEventReleaseServiceRedisImpl.setStartTime(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
 
         // when
         CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseServiceRedisImpl.applyEvent(authInfo);
@@ -62,6 +67,8 @@ public class ApplyArrivalEventTest extends ArrivalEventBase {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+        arrivalEventReleaseServiceRedisImpl.setStartDate(true);
+        arrivalEventReleaseServiceRedisImpl.setStartTime(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
 
         // when
         CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseServiceRedisImpl.applyEvent(authInfo);
@@ -92,6 +99,8 @@ public class ApplyArrivalEventTest extends ArrivalEventBase {
             when(result.getResponses()).thenReturn(Arrays.asList(false, 1));
             return result;
         });
+        arrivalEventReleaseServiceRedisImpl.setStartDate(true);
+        arrivalEventReleaseServiceRedisImpl.setStartTime(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
 
         // when
         CompletableFuture<ArrivalApplicationResponseDto> responseFuture = arrivalEventReleaseServiceRedisImpl.applyEvent(authInfo);
