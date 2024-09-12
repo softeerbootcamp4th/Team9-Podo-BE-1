@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.Base64;
+import java.util.Date;
 
 @Component
 public class TokenProvider {
@@ -38,7 +39,14 @@ public class TokenProvider {
                 throw new InvalidTokenException("Token signature is invalid");
             }
 
-            return signedJWT.getJWTClaimsSet();
+            JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+            // expirationTime 검증
+            Date expirationTime = claimsSet.getExpirationTime();
+            if (expirationTime == null || expirationTime.before(new Date())) {
+                throw new InvalidTokenException("이미 만료된 토큰입니다.");
+            }
+
+            return claimsSet;
 
         } catch (JOSEException | ParseException e) {
             throw new InvalidTokenException("JWE Token Decoding Error - 토큰 검증과정에서 오류 발생");
