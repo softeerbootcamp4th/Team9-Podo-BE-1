@@ -22,6 +22,6 @@ public class ArrivalEventSyncController {
 //    @PostMapping("/application")
     @Operation(summary = "선착순 응모용 Api")
     public CommonResponse<ArrivalApplicationResponseDto> arrivalEventApplication(@Auth AuthInfo authInfo) {
-        return new CommonResponse<>(arrivalEventSyncService.applyEvent(authInfo));
+        return new CommonResponse<>(arrivalEventSyncService.applyEventWithRedis(authInfo));
     }
 }
